@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: ./services/app/Dockerfile
+        volumes:
+            - ./test-app:/test-app
+            - tmp-data:/test-app/tmp
+
+    web:
+        build:
+            context: services/web
+        volumes:
+            - ./services/web/test_app.conf:/etc/nginx/conf.d/test_app.conf
+            - tmp-data:/test-app/tmp
+        ports:
+            - 8002:80
+
+    db:
+        build: ./services/db
+        volumes:
+            - db-data:/var/lib/mysql
+
+volumes:
+    tmp-data:
+    db-data:
